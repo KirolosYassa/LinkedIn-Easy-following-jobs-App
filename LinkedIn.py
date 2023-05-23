@@ -4,6 +4,9 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+
 
 import time
 
@@ -16,7 +19,9 @@ class LinkedIn():
         self.chrome_local_path = "C:\Development"
         self.driver = webdriver.Chrome(executable_path=self.chrome_local_path)
         self.driver.get(url)
-
+        
+        self.job_lists = []
+        self.actions = ActionChains(self.driver)
 
     def signin(self):
         sign_in = self.driver.find_element(By.XPATH, "/html/body/div[1]/header/nav/div/a[2]")
@@ -29,7 +34,7 @@ class LinkedIn():
 
         sign_in_in_form = self.driver.find_element(By.XPATH, "//*[@id='organic-div']/form/div[3]/button")
         sign_in_in_form.click()
-        time.sleep(4.2)
+        time.sleep(20.2)
         
         
     
@@ -37,6 +42,7 @@ class LinkedIn():
         self.job_lists = self.driver.find_elements(By.CSS_SELECTOR, "a.job-card-list__title")
         for job in self.job_lists:
             print(job.text)
+        time.sleep(2.2)
         return self.job_lists
     
     def click_specific_job(self, job_index=0):
@@ -45,20 +51,24 @@ class LinkedIn():
         
             
     def save_job(self):
-        save_button = self.driver.find_element(By.XPATH, "//*[@id='main']/div/div[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[3]/div/button")
-        save_button.click()
+        save_button = self.driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[3]/div/button')
+        save_word = self.driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[3]/div/button/span[2]')
+        if save_word != "Saved":
+            save_button.click()
         time.sleep(0.5)
     
     def follow_selected_job_company(self):
-        company = self.driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[1]/span[1]/span[1]')
+        time.sleep(2.5)
+        company = self.driver.find_element(By.CSS_SELECTOR , 'div.jobs-unified-top-card__primary-description > span[class="jobs-unified-top-card__subtitle-primary-grouping t-black"] > span[class="jobs-unified-top-card__company-name"] > a[class="ember-view t-black t-normal"]')
         print(f"company = {company.text}")
         company.click()
         time.sleep(2.5)
-        follow_button = self.driver.find_element(By.XPATH, '//*[@id="ember26"]/div[2]/div[1]/div[3]/div[1]/div[1]/button')
-
-        # follow_button = self.driver.find_element(By.CLASS_NAME, 'follow   org-company-follow-button org-top-card-primary-actions__action artdeco-button artdeco-button--primary')
-        follow_button.click()
-        print(f"follow button ={follow_button}")
         
+        follow_button = self.driver.find_element(By.CSS_SELECTOR, 'button[class="org-company-follow-button"]')
+        follow_word = self.driver.find_element(By.CSS_SELECTOR, 'button[class="org-company-follow-button"] > span')
+        print(f"follow button ={follow_button.text}")
+        if follow_word == "Follow":
+            follow_button.click()
+            self.actions.send_keys(Keys.ESCAPE).perform()
         self.driver.back()
         time.sleep(2.5)

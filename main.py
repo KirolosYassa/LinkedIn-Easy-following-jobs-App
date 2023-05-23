@@ -7,9 +7,10 @@ user = LinkedIn(url="https://www.linkedin.com/jobs/search/?currentJobId=36020077
 
 
 user.signin()
-user.get_jobs_list()
-user.click_specific_job(job_index=2)
-user.save_job()
-user.follow_selected_job_company()
+number_of_job_list = user.get_jobs_list()
+for i in range(len(number_of_job_list)):
+    user.click_specific_job(job_index=i)
+    user.save_job()
+    user.follow_selected_job_company()
 
 
