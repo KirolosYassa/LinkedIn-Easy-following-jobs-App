@@ -52,23 +52,21 @@ class LinkedIn():
             
     def save_job(self):
         save_button = self.driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[3]/div/button')
-        save_word = self.driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[3]/div/button/span[2]')
-        if save_word != "Saved":
+        # save_word = self.driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div/div[2]/div[1]/div/div[1]/div/div[1]/div[1]/div[3]/div/button/span[2]')
+        save_word = self.driver.find_element(By.CSS_SELECTOR, 'button.jobs-save-button > span')
+        save_word = save_word.text
+        print(f"follow button = {save_word}")
+        if save_word == "Save":
             save_button.click()
         time.sleep(0.5)
     
     def follow_selected_job_company(self):
-        time.sleep(2.5)
-        company = self.driver.find_element(By.CSS_SELECTOR , 'div.jobs-unified-top-card__primary-description > span[class="jobs-unified-top-card__subtitle-primary-grouping t-black"] > span[class="jobs-unified-top-card__company-name"] > a[class="ember-view t-black t-normal"]')
-        print(f"company = {company.text}")
-        company.click()
-        time.sleep(2.5)
-        
-        follow_button = self.driver.find_element(By.CSS_SELECTOR, 'button[class="org-company-follow-button"]')
-        follow_word = self.driver.find_element(By.CSS_SELECTOR, 'button[class="org-company-follow-button"] > span')
-        print(f"follow button ={follow_button.text}")
+        follow_button = self.driver.find_element(By.CSS_SELECTOR, 'button.follow')
+        follow_word = self.driver.find_element(By.CSS_SELECTOR, 'button.follow > span')
+        follow_word = follow_word.text
+        print(f"follow button ={follow_word}")
         if follow_word == "Follow":
             follow_button.click()
-            self.actions.send_keys(Keys.ESCAPE).perform()
-        self.driver.back()
+            
         time.sleep(2.5)
+        

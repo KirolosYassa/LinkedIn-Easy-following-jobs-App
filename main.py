@@ -7,10 +7,13 @@ user = LinkedIn(url="https://www.linkedin.com/jobs/search/?currentJobId=36020077
 
 
 user.signin()
-number_of_job_list = user.get_jobs_list()
-for i in range(len(number_of_job_list)):
+job_list = user.get_jobs_list()
+
+print("----------------------------------------------------")
+for i in range(len(job_list)):
+    print(f"company = {job_list[i].text}")
     user.click_specific_job(job_index=i)
     user.save_job()
     user.follow_selected_job_company()
-
+    print("----------------------------------------------------")
 
